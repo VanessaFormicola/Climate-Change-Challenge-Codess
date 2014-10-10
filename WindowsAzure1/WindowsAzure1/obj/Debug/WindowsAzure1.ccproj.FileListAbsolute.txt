@@ -1,0 +1,2 @@
+C:\pet-project\WindowsAzure1\WindowsAzure1\bin\Debug\ServiceConfiguration.cscfg
+C:\pet-project\WindowsAzure1\WindowsAzure1\bin\Debug\ServiceDefinition.csdef
