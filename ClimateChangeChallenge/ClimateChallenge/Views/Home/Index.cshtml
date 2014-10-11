@@ -2,43 +2,6 @@
     ViewBag.Title = "Home Page";
 }
 <script type="text/javascript">
-
-    //// Load the Visualization API and the piechart package.
-    //google.load('visualization', '1.0', { 'packages': ['corechart'] });
-
-    //// Set a callback to run when the Google Visualization API is loaded.
-    //google.setOnLoadCallback(drawChart);
-
-    //// Callback that creates and populates a data table,
-    //// instantiates the pie chart, passes in the data and
-    //// draws it.
-    //function drawChart() {
-
-    //    // Create the data table.
-    //    // grab the CSV
-    //    $.get("/Content/test_dataset.csv", function (csvString) {
-    //        var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
-    //        var data = new google.visualization.arrayToDataTable(arrayData);
-
-    //        // this view can select a subset of the data at a time
-    //        var view = new google.visualization.DataView(data);
-    //        view.setColumns([0, 1]);
-
-    //        // Set chart options
-    //        var options = {
-    //            title: "Populations",
-    //            hAxis: { title: data.getColumnLabel(0), minValue: data.getColumnRange(0).min, maxValue: data.getColumnRange(0).max },
-    //            vAxis: { title: data.getColumnLabel(1), minValue: data.getColumnRange(1).min, maxValue: data.getColumnRange(1).max },
-    //            legend: 'none'
-    //        };
-
-    //        // Instantiate and draw our chart, passing in some options.
-    //        var chart = new google.visualization.ScatterChart(document.getElementById('chart'));
-    //        chart.draw(view, options);
-    //    });
-    //}
-</script>
-<script type="text/javascript">
         // Load the Visualization API and the piechart package.
         google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
@@ -49,7 +12,7 @@
             $.ajax({
                 type: "GET",
                 async: false,
-                url: "/Content/test_dataset.csv",
+                url: "/Content/kzn1993.csv",
                 crossDomain: true,
                 dataType: "text",
                 success: function (csvString) {
@@ -79,30 +42,7 @@
             });
         }
     </script>
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
+<div id="chart">
+
 </div>
