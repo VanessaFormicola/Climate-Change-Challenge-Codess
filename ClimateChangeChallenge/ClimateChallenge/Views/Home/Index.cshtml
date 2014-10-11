@@ -2,102 +2,67 @@
     ViewBag.Title = "Home Page";
 }
 
-@*<script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', { 'packages': ['corechart'] });
-
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        $.ajax({
-            type: "GET",
-            async: false,
-            url: "/Content/emissions_1995_2010.csv",
-            crossDomain: true,
-            dataType: "text",
-            success: function (csvString) {
-                var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
-                var data = new google.visualization.arrayToDataTable(arrayData);
-
-                // this view can select a subset of the data at a time
-                var view = new google.visualization.DataView(data);
-                view.setColumns([2, 3]);
-
-                // Set scatter chart options
-                var scatter_options = {
-                    title: "Co2 emissions",
-                    hAxis: { title: data.getColumnLabel(2), minValue: data.getColumnRange(2).min, maxValue: data.getColumnRange(2).max },
-                    vAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
-                    legend: 'none'
-                };
-
-                // Instantiate and draw our chart, passing in some options.
-                var scatter_chart = new google.visualization.ScatterChart(document.getElementById('chart_scatter'));
-                scatter_chart.draw(view, scatter_options);
-            },
-            error: function (request, status, error) {
-                alert(request.responseText);
-            }
-        });
-    }
-</script>*@
 
 <script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', { 'packages': ['corechart'] });
+        String.Format = function (b) {
+            var a = arguments;
+            return b.replace(/(\{\{\d\}\}|\{\d\})/g, function (b) {
+                if (b.substring(0, 2) == "{{") return b;
+                var c = parseInt(b.match(/\d/)[0]);
+                return a[c + 1]
+            })
+        };
+            // Load the Visualization API and the piechart package.
+            google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
-    // Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
+            // Set a callback to run when the Google Visualization API is loaded.
+            google.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-        $.ajax({
-            type: "GET",
-            async: false,
-            url: "/Content/country-template2.csv",
-            crossDomain: true,
-            dataType: "text",
-            success: function (csvString) {
-                var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
+            function drawChart() {
+                count = 2055;
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: String.Format("/Content/multiyear-data/{0}.csv", count),
+                    crossDomain: true,
+                    dataType: "text",
+                    success: function (csvString) {
 
-                var labelData = $.csv.toArrays(csvString);
+                        var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
 
-                for (var i = 0; i < arrayData.length; i++) {
-                    arrayData[i][1] = labelData[i][1];
-                }
-                var data = new google.visualization.arrayToDataTable(arrayData);
+                        var labelData = $.csv.toArrays(csvString);
 
-                // this view can select a subset of the data at a time
-                var view = new google.visualization.DataView(data);
-                view.setColumns([1, 2,3,0,4]);
+                        for (var i = 0; i < arrayData.length; i++) {
+                            arrayData[i][1] = labelData[i][1];
+                        }
+                        var data = new google.visualization.arrayToDataTable(arrayData);
 
-                // Set bubble chart options
-                var bubble_options = {
-                    title: "Green house emissions VS GDP per capita for 2010",
-                    hAxis: { title: data.getColumnLabel(2), minValue: data.getColumnRange(2).min, maxValue: data.getColumnRange(2).max },
-                    vAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
-                    bubble: { stroke: "transparent", opacity: 0.7, textStyle: {fontSize: 10} },
-                    colorAxis: { colors: ['red', 'blue'] },
-                    height: 800
-                };
+                        // this view can select a subset of the data at a time
+                        var view = new google.visualization.DataView(data);
+                        view.setColumns([1, 2, 3, 0, 4]);
 
-                // Instantiate and draw our chart, passing in some options.
-                var bubble_chart = new google.visualization.BubbleChart(document.getElementById('chart_bubble'));
-                bubble_chart.draw(view, bubble_options);
-            },
-            error: function (request, status, error) {
-                alert(request.responseText);
+                        // Set bubble chart options
+                        var bubble_options = {
+                            title: String.Format("Average Temperature VS Annual Rainfall for {0}", count),
+                            hAxis: { title: data.getColumnLabel(2), minValue: data.getColumnRange(2).min, maxValue: data.getColumnRange(2).max },
+                            vAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
+                            bubble: { stroke: "transparent", opacity: 0.7, textStyle: { fontSize: 0.1 } },
+                            colorAxis: { colors: ['red', 'blue'] },
+                            height: 500
+                        };
+
+                        // Instantiate and draw our chart, passing in some options.
+                        var bubble_chart = new google.visualization.BubbleChart(document.getElementById('chart_bubble'));
+                        bubble_chart.draw(view, bubble_options);
+
+                    },
+                    error: function (request, status, error) {
+                        alert(request.responseText);
+                    }
+                }); 
             }
-        });
-    }
+        
 </script>
-
-<div id="chart_scatter">
-
-</div>
 <div id="chart_bubble">
-
-</div>
-<div id="chart_map">
 
 </div>
