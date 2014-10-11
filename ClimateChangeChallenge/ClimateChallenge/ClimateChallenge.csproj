@@ -198,7 +198,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Content\test_dataset.csv" />
     <Content Include="Content\kzn1993.csv" />
     <Content Include="Content\emissions_1995_2010.csv" />
     <Content Include="Content\country-template.csv" />
