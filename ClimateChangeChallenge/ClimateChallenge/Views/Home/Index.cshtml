@@ -1,48 +1,62 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+
+
 <script type="text/javascript">
-        // Load the Visualization API and the piechart package.
-        google.load('visualization', '1.0', { 'packages': ['corechart'] });
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.setOnLoadCallback(drawChart);
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-            $.ajax({
-                type: "GET",
-                async: false,
-                url: "/Content/kzn1993.csv",
-                crossDomain: true,
-                dataType: "text",
-                success: function (csvString) {
-                    alert(csvString);
-                    var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
-                    var data = new google.visualization.arrayToDataTable(arrayData);
+    function drawChart() {
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/Content/emissions_1995_2010.csv",
+            crossDomain: true,
+            dataType: "text",
+            success: function (csvString) {
+                var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
 
-                    // this view can select a subset of the data at a time
-                    var view = new google.visualization.DataView(data);
-                    view.setColumns([0, 1]);
+                var labelData = $.csv.toArrays(csvString);
 
-                    // Set chart options
-                    var options = {
-                        title: "Populations",
-                        hAxis: { title: data.getColumnLabel(0), minValue: data.getColumnRange(0).min, maxValue: data.getColumnRange(0).max },
-                        vAxis: { title: data.getColumnLabel(1), minValue: data.getColumnRange(1).min, maxValue: data.getColumnRange(1).max },
-                        legend: 'none'
-                    };
-
-                    // Instantiate and draw our chart, passing in some options.
-                    var chart = new google.visualization.ScatterChart(document.getElementById('chart'));
-                    chart.draw(view, options);
-                },
-                error: function (request, status, error) {
-                    alert(request.responseText);
+                for (var i = 0; i < arrayData.length; i++) {
+                    arrayData[i][1] = labelData[i][1];
                 }
-            });
-        }
-    </script>
+                var data = new google.visualization.arrayToDataTable(arrayData);
 
-<div id="chart">
+                // this view can select a subset of the data at a time
+                var view = new google.visualization.DataView(data);
+                view.setColumns([1, 3, 4]);
+
+                // Set bubble chart options
+                var bubble_options = {
+                    title: "CO2 emission",
+                    hAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
+                    vAxis: { title: data.getColumnLabel(4), minValue: data.getColumnRange(4).min, maxValue: data.getColumnRange(4).max },
+                    bubble: { stroke: "transparent", opacity: 0.2 },
+                    colorAxis: { colors: ['red', 'blue'] }
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var bubble_chart = new google.visualization.BubbleChart(document.getElementById('chart_bubble'));
+                bubble_chart.draw(view, bubble_options);
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+        });
+    }
+</script>
+
+<div id="chart_scatter">
+
+</div>
+<div id="chart_bubble">
+
+</div>
+<div id="chart_map">
 
 </div>
