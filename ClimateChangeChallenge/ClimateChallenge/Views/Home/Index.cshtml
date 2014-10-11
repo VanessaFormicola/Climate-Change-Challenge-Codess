@@ -2,8 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-
-<script type="text/javascript">
+@*<script type="text/javascript">
     // Load the Visualization API and the piechart package.
     google.load('visualization', '1.0', { 'packages': ['corechart'] });
 
@@ -19,6 +18,47 @@
             dataType: "text",
             success: function (csvString) {
                 var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
+                var data = new google.visualization.arrayToDataTable(arrayData);
+
+                // this view can select a subset of the data at a time
+                var view = new google.visualization.DataView(data);
+                view.setColumns([2, 3]);
+
+                // Set scatter chart options
+                var scatter_options = {
+                    title: "Co2 emissions",
+                    hAxis: { title: data.getColumnLabel(2), minValue: data.getColumnRange(2).min, maxValue: data.getColumnRange(2).max },
+                    vAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
+                    legend: 'none'
+                };
+
+                // Instantiate and draw our chart, passing in some options.
+                var scatter_chart = new google.visualization.ScatterChart(document.getElementById('chart_scatter'));
+                scatter_chart.draw(view, scatter_options);
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+        });
+    }
+</script>*@
+
+<script type="text/javascript">
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1.0', { 'packages': ['corechart'] });
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: "/Content/country-template2.csv",
+            crossDomain: true,
+            dataType: "text",
+            success: function (csvString) {
+                var arrayData = $.csv.toArrays(csvString, { onParseValue: $.csv.hooks.castToScalar });
 
                 var labelData = $.csv.toArrays(csvString);
 
@@ -29,15 +69,16 @@
 
                 // this view can select a subset of the data at a time
                 var view = new google.visualization.DataView(data);
-                view.setColumns([1, 3, 4]);
+                view.setColumns([1, 2,3,0,4]);
 
                 // Set bubble chart options
                 var bubble_options = {
-                    title: "CO2 emission",
-                    hAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
-                    vAxis: { title: data.getColumnLabel(4), minValue: data.getColumnRange(4).min, maxValue: data.getColumnRange(4).max },
-                    bubble: { stroke: "transparent", opacity: 0.2 },
-                    colorAxis: { colors: ['red', 'blue'] }
+                    title: "Green house emissions VS GDP per capita for 2010",
+                    hAxis: { title: data.getColumnLabel(2), minValue: data.getColumnRange(2).min, maxValue: data.getColumnRange(2).max },
+                    vAxis: { title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max },
+                    bubble: { stroke: "transparent", opacity: 0.7, textStyle: {fontSize: 10} },
+                    colorAxis: { colors: ['red', 'blue'] },
+                    height: 800
                 };
 
                 // Instantiate and draw our chart, passing in some options.
